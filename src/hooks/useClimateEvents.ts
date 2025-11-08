@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useEventsStore } from '@/store/eventsStore';
 import type { ClimateEvent } from '@/types';
-const API_URL = 'https://climate-events-min.asialakaygrady-6d4.workers.dev/';
+const API_URL = 'https://climate-events-min.asialakaygrady-6d4.workers.dev/events.json';
 const MOCK_EVENTS: ClimateEvent[] = [
     { title: "2026 UN Climate Change Conference (COP31)", address: "Sharm El Sheikh, Egypt", date: "2026-11-06T00:00:00Z" },
     { title: "Global Renewable Energy Summit", address: "Dubai, UAE", date: "2026-03-22T00:00:00Z" },
@@ -42,7 +42,17 @@ export function useClimateEvents() {
             const response = await fetchWithRetry(API_URL);
             const data = await response.json();
             if (Array.isArray(data)) {
-                setEvents(data, false);
+                // Transform API data to match ClimateEvent interface
+                const transformedEvents: ClimateEvent[] = data.map((event: any) => ({
+                    title: event.title || 'Untitled Event',
+                    address: event.address || `${event.city || 'Unknown Location'}`,
+                    date: event.date_local && event.time_local
+                        ? new Date(`${event.date_local}T${event.time_local}`).toISOString()
+                        : event.date_local
+                            ? new Date(event.date_local).toISOString()
+                            : undefined
+                }));
+                setEvents(transformedEvents, false);
             } else {
                 throw new Error("Invalid data structure from API.");
             }
