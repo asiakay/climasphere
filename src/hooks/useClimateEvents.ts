@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import { useEventsStore } from '@/store/eventsStore';
 import type { ClimateEvent } from '@/types';
-const API_URL = 'https://climate-events-min.qxc.workers.dev/events.json';
+const API_URL = 'https://climate-events-min.asialakaygrady-6d4.workers.dev/';
 const MOCK_EVENTS: ClimateEvent[] = [
     { title: "2026 UN Climate Change Conference (COP31)", address: "Sharm El Sheikh, Egypt", date: "2026-11-06T00:00:00Z" },
     { title: "Global Renewable Energy Summit", address: "Dubai, UAE", date: "2026-03-22T00:00:00Z" },
